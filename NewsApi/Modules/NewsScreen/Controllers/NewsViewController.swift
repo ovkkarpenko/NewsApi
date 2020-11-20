@@ -33,7 +33,6 @@ class NewsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.isScrollEnabled = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -45,6 +44,17 @@ class NewsViewController: UIViewController {
         setupLayout()
         setupTableView()
         setupSearchBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.isScrollEnabled = false
+        viewModel.fetchItems { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.isScrollEnabled = true
+            }
+        }
     }
     
     private let bag = DisposeBag()
@@ -91,10 +101,6 @@ class NewsViewController: UIViewController {
                 vc.urlString = article.url
                 self?.navigationController?.pushViewController(vc, animated: true)
             }).disposed(by: bag)
-        
-        viewModel.fetchItems { [weak self] in
-            self?.tableView.isScrollEnabled = true
-        }
     }
     
     func setupSearchBar() {
@@ -122,9 +128,11 @@ extension NewsViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 150 {
             
-            scrollView.isScrollEnabled = false
-            viewModel.nextPage {
-                scrollView.isScrollEnabled = true
+            tableView.isScrollEnabled = false
+            viewModel.nextPage { [weak self] in
+                DispatchQueue.main.async {
+                    self?.tableView.isScrollEnabled = true
+                }
             }
         }
     }

@@ -10,7 +10,7 @@ import RxSwift
 import RxDataSources
 
 class CountryViewController: UIViewController {
-
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.tableFooterView = UIView()
@@ -52,6 +52,7 @@ class CountryViewController: UIViewController {
         tableView.rx
             .modelSelected(String.self)
             .subscribe(onNext: { item in
+                
                 filteringCountry = [item : self.viewModel.countries[item] ?? ""]
                 self.navigationController?.popViewController(animated: true)
             }).disposed(by: bag)

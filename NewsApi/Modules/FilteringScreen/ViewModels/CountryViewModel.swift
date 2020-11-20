@@ -10,8 +10,8 @@ import RxDataSources
 
 class CountryViewModel {
     
-    let countries = ["pl": "Poland", "eg": "Egypt", "rs": "Russian", "us": "United States"]
-    let items = Observable<[SectionModel<String, String>]>.of([SectionModel<String, String>(model: "", items: ["pl", "eg", "rs", "us"])])
+    let countries = ["all": "All", "pl": "Poland", "eg": "Egypt", "rs": "Russian", "us": "United States"]
+    let items = Observable<[SectionModel<String, String>]>.of([SectionModel<String, String>(model: "", items: ["all", "pl", "eg", "rs", "us"])])
     
     func dataSource(cellIdentifier: String) -> RxTableViewSectionedReloadDataSource<SectionModel<String, String>> {
         

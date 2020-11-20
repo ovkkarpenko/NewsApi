@@ -10,8 +10,8 @@ import RxDataSources
 
 class CategoryViewModel {
     
-    let categories = ["business": "Business", "entertainment": "Entertainment", "general": "General", "health": "Health", "science": "Science", "sports": "Sports", "technology": "Technology"]
-    let items = Observable<[SectionModel<String, String>]>.of([SectionModel<String, String>(model: "", items: ["business", "entertainment", "general", "health", "science", "sports", "technology"])])
+    let categories = ["all": "All", "business": "Business", "entertainment": "Entertainment", "general": "General", "health": "Health", "science": "Science", "sports": "Sports", "technology": "Technology"]
+    let items = Observable<[SectionModel<String, String>]>.of([SectionModel<String, String>(model: "", items: ["all", "business", "entertainment", "general", "health", "science", "sports", "technology"])])
     
     func dataSource(cellIdentifier: String) -> RxTableViewSectionedReloadDataSource<SectionModel<String, String>> {
         

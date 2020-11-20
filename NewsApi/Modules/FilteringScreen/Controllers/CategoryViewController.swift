@@ -52,6 +52,7 @@ class CategoryViewController: UIViewController {
         tableView.rx
             .modelSelected(String.self)
             .subscribe(onNext: { item in
+                
                 filteringCategory = [item : self.viewModel.categories[item] ?? ""]
                 self.navigationController?.popViewController(animated: true)
             }).disposed(by: bag)

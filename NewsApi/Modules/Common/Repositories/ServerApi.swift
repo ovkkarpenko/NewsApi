@@ -14,11 +14,16 @@ class ServerApi {
     private init() { }
     
     func getTopHeadlines(page: Int, _ completion: @escaping (NewsModel) -> ()) {
-        var params = "page=\(page)&country=us"
+        var params = "page=\(page)"
         
         if let country = filteringCountry.first?.key,
-           let category = filteringCategory.first?.key {
-            params = "country=\(country)&category=\(category)&page=\(page)&country=us"
+           country != "all" {
+            params += "&country=\(country)"
+        }
+        
+        if let category = filteringCategory.first?.key,
+           category != "all" {
+            params += "&category=\(category)"
         }
         
         if filteringQuery != "" {
