@@ -13,7 +13,7 @@ class ServerApi {
     
     private init() { }
     
-    func getTopHeadlines(page: Int, _ completion: @escaping (NewsModel) -> ()) {
+    func getTopHeadlines(page: Int, _ completion: @escaping (NewsModel?) -> ()) {
         var params = "page=\(page)"
         
         if let country = filteringCountry.first?.key,
@@ -38,6 +38,8 @@ class ServerApi {
                 
                 if let news = response.value {
                     completion(news)
+                } else {
+                    completion(nil)
                 }
             }
     }

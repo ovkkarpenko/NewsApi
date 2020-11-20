@@ -12,18 +12,36 @@ import RxDataSources
 class NewsViewModel {
     
     private var page = 1
-    private var articles: [ArticleModel] = []
     
+    var isEndedPages = false
+    var articles: [ArticleModel] = []
     var items = PublishSubject<[SectionModel<String, ArticleModel>]>()
     
     func fetchItems(_ completion: (() -> ())? = nil) {
+        if isQueryChanged {
+            isQueryChanged = false
+            isEndedPages = false
+            page = 1
+            articles.removeAll()
+        }
+        
         ServerApi.shared.getTopHeadlines(page: page) { [weak self] news in
             guard let self = self else { return }
             
-            self.articles.append(contentsOf: news.articles)
-            self.articles = self.articles.sorted(by: self.sortedArticles)
+            guard let news = news else {
+                self.sortItems()
+                completion?()
+                return
+            }
             
-            self.items.onNext([SectionModel(model: "", items: self.articles)])
+            if news.articles.count == 0 {
+                self.isEndedPages = true
+                completion?()
+                return
+            }
+            
+            self.addNewItems(news.articles)
+            self.sortItems()
             completion?()
         }
     }
@@ -55,6 +73,19 @@ class NewsViewModel {
                 
                 return cell
             })
+    }
+    
+    private func addNewItems(_ articles: [ArticleModel]) {
+        articles.forEach { item in
+            if !self.articles.contains(where: { $0.title == item.title }) {
+                self.articles.append(item)
+            }
+        }
+    }
+    
+    private func sortItems() {
+        self.articles = self.articles.sorted(by: self.sortedArticles)
+        self.items.onNext([SectionModel(model: "", items: self.articles)])
     }
     
     private func sortedArticles(item1: ArticleModel, item2: ArticleModel) -> Bool {

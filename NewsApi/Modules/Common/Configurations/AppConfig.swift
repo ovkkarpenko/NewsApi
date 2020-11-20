@@ -13,6 +13,7 @@ private let categoryKey = "category"
 private let sortedByDescKey = "sortedByDesc"
 
 var filteringQuery = ""
+var isQueryChanged = false
 
 var filteringCountry: [String : Any] {
     get {

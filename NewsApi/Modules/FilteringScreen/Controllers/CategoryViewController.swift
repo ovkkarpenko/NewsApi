@@ -53,7 +53,9 @@ class CategoryViewController: UIViewController {
             .modelSelected(String.self)
             .subscribe(onNext: { item in
                 
+                isQueryChanged = true
                 filteringCategory = [item : self.viewModel.categories[item] ?? ""]
+                
                 self.navigationController?.popViewController(animated: true)
             }).disposed(by: bag)
     }

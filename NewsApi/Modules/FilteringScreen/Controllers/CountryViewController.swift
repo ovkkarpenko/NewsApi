@@ -53,7 +53,9 @@ class CountryViewController: UIViewController {
             .modelSelected(String.self)
             .subscribe(onNext: { item in
                 
+                isQueryChanged =  true
                 filteringCountry = [item : self.viewModel.countries[item] ?? ""]
+                
                 self.navigationController?.popViewController(animated: true)
             }).disposed(by: bag)
     }

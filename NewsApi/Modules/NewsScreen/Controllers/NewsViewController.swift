@@ -67,6 +67,8 @@ class NewsViewController: UIViewController {
     private let padding: CGFloat = 20
     private let cellIdentifier = "NewsCell"
     
+    private lazy var loaderViewHeightConstraint = loaderView.heightAnchor.constraint(equalToConstant: 0)
+    
     func setupLayout() {
         view.addSubview(backgroundView)
         view.addSubview(tableView)
@@ -82,11 +84,13 @@ class NewsViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: loaderView.topAnchor, constant: -padding),
+            tableView.bottomAnchor.constraint(equalTo: loaderView.topAnchor),
             
             loaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             loaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            loaderView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: padding),
             loaderView.bottomAnchor.constraint(equalTo: filteringButton.topAnchor, constant: -padding),
+            loaderViewHeightConstraint,
             
             filteringButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             filteringButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
@@ -122,12 +126,11 @@ class NewsViewController: UIViewController {
             .withLatestFrom(searchBar.rx.text.orEmpty)
             .subscribe(onNext: { (text) in
                 
-                if text != "" {
-                    filteringQuery = text
-                    
-                    self.startLoading()
-                    self.viewModel.fetchItems(self.stopLoading)
-                }
+                isQueryChanged = true
+                filteringQuery = text
+                
+                self.startLoading()
+                self.viewModel.fetchItems(self.stopLoading)
             }).disposed(by: bag)
         
         self.navigationItem.titleView = searchBar
@@ -135,12 +138,14 @@ class NewsViewController: UIViewController {
     
     func startLoading() {
         tableView.isScrollEnabled = false
+        loaderViewHeightConstraint.constant = 40
         loaderView.startAnimating()
     }
     
     func stopLoading() {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.isScrollEnabled = true
+            self?.loaderViewHeightConstraint.constant = 0
             self?.loaderView.stopAnimating()
         }
     }
@@ -151,8 +156,10 @@ extension NewsViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 150 {
             
-            startLoading()
-            viewModel.nextPage(stopLoading)
+            if !viewModel.isEndedPages && viewModel.articles.count >= 20 {
+                startLoading()
+                viewModel.nextPage(stopLoading)
+            }
         }
     }
     

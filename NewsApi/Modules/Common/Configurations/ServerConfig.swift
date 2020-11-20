@@ -7,7 +7,7 @@
 
 let baseUrl = "http://newsapi.org"
 let baseApiUrl = "http://newsapi.org/v2"
-let apiKey = "64468ca542374dce82a5611ecbf3c7d0"
+let apiKey = "634963ea644246bfbaa404306e4a0af2"
 
 enum ApiMethods {
     case topHeadlines

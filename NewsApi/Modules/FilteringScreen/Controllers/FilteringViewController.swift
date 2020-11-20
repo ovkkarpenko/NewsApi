@@ -53,6 +53,20 @@ class FilteringViewController: UIViewController {
         setupLayout()
         setupTableView()
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if filteringCountry.first?.key == "all" && filteringCategory.first?.key == "all" {
+            
+            let alert = UIAlertController(
+                title: "Error",
+                message: "You need to select at least one search parameter.",
+                preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            
+            self.navigationController?.present(alert, animated: true)
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
