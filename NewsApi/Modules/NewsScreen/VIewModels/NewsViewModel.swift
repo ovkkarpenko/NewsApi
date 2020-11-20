@@ -21,6 +21,8 @@ class NewsViewModel {
             guard let self = self else { return }
             
             self.articles.append(contentsOf: news.articles)
+            self.articles = self.articles.sorted(by: self.sortedArticles)
+            
             self.items.onNext([SectionModel(model: "", items: self.articles)])
             completion?()
         }
@@ -53,5 +55,22 @@ class NewsViewModel {
                 
                 return cell
             })
+    }
+    
+    private func sortedArticles(item1: ArticleModel, item2: ArticleModel) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        
+        if let stringDate1 = item1.publishedAt,
+           let stringDate2 = item2.publishedAt,
+           let date1 = dateFormatter.date(from: stringDate1),
+           let date2 = dateFormatter.date(from: stringDate2) {
+            
+            return sortedByDesc
+                ? date1 > date2
+                : date2 > date1
+        }
+        
+        return false
     }
 }

@@ -6,4 +6,5 @@ target 'NewsApi' do
     pod 'RxCocoa'
     pod 'RxDataSources'
     pod 'Alamofire'
+    pod 'NVActivityIndicatorView'
 end

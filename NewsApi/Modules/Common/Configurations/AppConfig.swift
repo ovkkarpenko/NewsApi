@@ -10,8 +10,9 @@ import Foundation
 
 private let countryKey = "country"
 private let categoryKey = "category"
+private let sortedByDescKey = "sortedByDesc"
 
-var filteringQuery: String = ""
+var filteringQuery = ""
 
 var filteringCountry: [String : Any] {
     get {
@@ -26,5 +27,13 @@ var filteringCategory: [String : Any] {
         UserDefaults.standard.dictionary(forKey: categoryKey) ?? ["business" : "Business"]
     } set {
         UserDefaults.standard.setValue(newValue, forKey: categoryKey)
+    }
+}
+
+var sortedByDesc: Bool {
+    get {
+        UserDefaults.standard.bool(forKey: sortedByDescKey)
+    } set {
+        UserDefaults.standard.setValue(newValue, forKey: sortedByDescKey)
     }
 }

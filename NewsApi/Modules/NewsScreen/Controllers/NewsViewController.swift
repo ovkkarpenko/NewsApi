@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import NVActivityIndicatorView
 
 class NewsViewController: UIViewController {
     
@@ -33,8 +34,15 @@ class NewsViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.tableFooterView = UIView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+    
+    private lazy var loaderView: NVActivityIndicatorView = {
+        let view = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40), type: .pacman, color: FontColorHelper.second.color())
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     override func viewDidLoad() {
@@ -49,12 +57,8 @@ class NewsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.isScrollEnabled = false
-        viewModel.fetchItems { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.isScrollEnabled = true
-            }
-        }
+        startLoading()
+        viewModel.fetchItems(stopLoading)
     }
     
     private let bag = DisposeBag()
@@ -66,6 +70,7 @@ class NewsViewController: UIViewController {
     func setupLayout() {
         view.addSubview(backgroundView)
         view.addSubview(tableView)
+        view.addSubview(loaderView)
         view.addSubview(filteringButton)
         
         NSLayoutConstraint.activate([
@@ -77,7 +82,11 @@ class NewsViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: filteringButton.topAnchor, constant: -padding),
+            tableView.bottomAnchor.constraint(equalTo: loaderView.topAnchor, constant: -padding),
+            
+            loaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            loaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            loaderView.bottomAnchor.constraint(equalTo: filteringButton.topAnchor, constant: -padding),
             
             filteringButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             filteringButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
@@ -115,11 +124,25 @@ class NewsViewController: UIViewController {
                 
                 if text != "" {
                     filteringQuery = text
-                    self.viewModel.fetchItems()
+                    
+                    self.startLoading()
+                    self.viewModel.fetchItems(self.stopLoading)
                 }
             }).disposed(by: bag)
         
         self.navigationItem.titleView = searchBar
+    }
+    
+    func startLoading() {
+        tableView.isScrollEnabled = false
+        loaderView.startAnimating()
+    }
+    
+    func stopLoading() {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.isScrollEnabled = true
+            self?.loaderView.stopAnimating()
+        }
     }
 }
 
@@ -128,12 +151,8 @@ extension NewsViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.frame.height < 150 {
             
-            tableView.isScrollEnabled = false
-            viewModel.nextPage { [weak self] in
-                DispatchQueue.main.async {
-                    self?.tableView.isScrollEnabled = true
-                }
-            }
+            startLoading()
+            viewModel.nextPage(stopLoading)
         }
     }
     
