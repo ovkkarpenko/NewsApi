@@ -8,26 +8,30 @@
 import UIKit
 import RxSwift
 import NVActivityIndicatorView
+import Firebase
+import GoogleSignIn
 
 class NewsViewController: UIViewController {
     
-    private lazy var backgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private lazy var filteringButton: UIButton = {
         let button = PrimaryButton(title: "Filtering")
-        
-        button.rx
-            .controlEvent(.touchUpInside)
-            .subscribe(onNext: {
-                let vc = FilteringViewController()
-                self.navigationController?.pushViewController(vc, animated: true)
-            }).disposed(by: bag)
-        
+        button.addTarget(self, action: #selector(filteringButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var favoriteButton: UIButton = {
+        let button = PrimaryButton(title: "Favorite")
+        button.addTarget(self, action: #selector(favoriteButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var singOutButton: UIButton = {
+        let button = PrimaryButton(title: "Sing out")
+        button.backgroundColor = .white
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(singOutButtonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -49,7 +53,7 @@ class NewsViewController: UIViewController {
         super.viewDidLoad()
         title = "News"
         
-        setupLayout()
+        setupUI()
         setupTableView()
         setupSearchBar()
     }
@@ -58,7 +62,7 @@ class NewsViewController: UIViewController {
         super.viewWillAppear(animated)
         
         startLoading()
-        viewModel.fetchItems(stopLoading)
+        viewModel.fetchData(stopLoading)
     }
     
     private let bag = DisposeBag()
@@ -69,18 +73,14 @@ class NewsViewController: UIViewController {
     
     private lazy var loaderViewHeightConstraint = loaderView.heightAnchor.constraint(equalToConstant: 0)
     
-    func setupLayout() {
-        view.addSubview(backgroundView)
+    func setupUI() {
         view.addSubview(tableView)
         view.addSubview(loaderView)
         view.addSubview(filteringButton)
+        view.addSubview(favoriteButton)
+        view.addSubview(singOutButton)
         
         NSLayoutConstraint.activate([
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -88,14 +88,23 @@ class NewsViewController: UIViewController {
             
             loaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             loaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            loaderView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: padding),
             loaderView.bottomAnchor.constraint(equalTo: filteringButton.topAnchor, constant: -padding),
             loaderViewHeightConstraint,
             
             filteringButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             filteringButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            filteringButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -padding*2)
+            filteringButton.bottomAnchor.constraint(equalTo: favoriteButton.topAnchor, constant: -10),
+            
+            favoriteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            favoriteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            favoriteButton.bottomAnchor.constraint(equalTo: singOutButton.topAnchor, constant: -10),
+            
+            singOutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            singOutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            singOutButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -padding*2)
         ])
+        
+        view.backgroundColor = .white
     }
     
     func setupTableView() {
@@ -111,7 +120,7 @@ class NewsViewController: UIViewController {
             .subscribe(onNext: { [weak self] article in
                 
                 let vc = BrowserViewController()
-                vc.urlString = article.url
+                vc.article = article
                 self?.navigationController?.pushViewController(vc, animated: true)
             }).disposed(by: bag)
     }
@@ -126,11 +135,11 @@ class NewsViewController: UIViewController {
             .withLatestFrom(searchBar.rx.text.orEmpty)
             .subscribe(onNext: { (text) in
                 
-                isQueryChanged = true
-                filteringQuery = text
+                AppConfig.shared.isQueryChanged = true
+                AppConfig.shared.filteringQuery = text
                 
                 self.startLoading()
-                self.viewModel.fetchItems(self.stopLoading)
+                self.viewModel.fetchData(self.stopLoading)
             }).disposed(by: bag)
         
         self.navigationItem.titleView = searchBar
@@ -148,6 +157,25 @@ class NewsViewController: UIViewController {
             self?.loaderViewHeightConstraint.constant = 0
             self?.loaderView.stopAnimating()
         }
+    }
+    
+    @objc private func filteringButtonPressed() {
+        let vc = FilteringViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func favoriteButtonPressed() {
+        let vc = FavoriteViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func singOutButtonPressed() {
+        AppConfig.shared.idToken = ""
+        AppConfig.shared.accessToken = ""
+        AppConfig.shared.currentUser = nil
+        
+        try? Auth.auth().signOut()
+        self.navigationController?.dismiss(animated: true)
     }
 }
 

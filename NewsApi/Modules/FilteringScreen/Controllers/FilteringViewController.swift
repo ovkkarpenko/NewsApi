@@ -33,14 +33,14 @@ class FilteringViewController: UIViewController {
     
     private lazy var sortedSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.isOn = sortedByDesc
+        uiSwitch.isOn = AppConfig.shared.sortedByDesc
         
         uiSwitch.rx
             .controlEvent(.valueChanged)
             .withLatestFrom(uiSwitch.rx.isOn)
             .subscribe(onNext: { checked in
                 
-                sortedByDesc = checked
+                AppConfig.shared.sortedByDesc = checked
             }).disposed(by: bag)
         
         uiSwitch.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +56,7 @@ class FilteringViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if filteringCountry.first?.key == "all" && filteringCategory.first?.key == "all" {
+        if AppConfig.shared.filteringCountry.first?.key == "all" && AppConfig.shared.filteringCategory.first?.key == "all" {
             
             let alert = UIAlertController(
                 title: "Error",

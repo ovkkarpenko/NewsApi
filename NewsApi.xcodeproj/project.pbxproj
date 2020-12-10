@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		9155A738896DEBA42EC1D32A /* Pods_NewsApi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5587DAE12518A4FD20EE171F /* Pods_NewsApi.framework */; };
+		FA1738C325822FB900345A0E /* DBApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1738C225822FB900345A0E /* DBApi.swift */; };
+		FA1738E52582415500345A0E /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1738E42582415500345A0E /* FavoriteViewController.swift */; };
+		FA1738EA2582429B00345A0E /* FavoriteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1738E92582429B00345A0E /* FavoriteViewModel.swift */; };
+		FA797C12258216AA00A4DE1C /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA797C11258216AA00A4DE1C /* AuthViewController.swift */; };
+		FAB22C82258223F8003D1B71 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAB22C81258223F8003D1B71 /* GoogleService-Info.plist */; };
 		FAB8E1482567BAE00067062F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB8E1472567BAE00067062F /* AppDelegate.swift */; };
 		FAB8E1512567BAE10067062F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAB8E1502567BAE10067062F /* Assets.xcassets */; };
 		FAB8E1542567BAE10067062F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAB8E1522567BAE10067062F /* LaunchScreen.storyboard */; };
@@ -35,6 +40,11 @@
 		0F61188F6E9DCD98130BA433 /* Pods-NewsApi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsApi.debug.xcconfig"; path = "Target Support Files/Pods-NewsApi/Pods-NewsApi.debug.xcconfig"; sourceTree = "<group>"; };
 		5587DAE12518A4FD20EE171F /* Pods_NewsApi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsApi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F53AC05FAFFB0992B8BFA81 /* Pods-NewsApi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsApi.release.xcconfig"; path = "Target Support Files/Pods-NewsApi/Pods-NewsApi.release.xcconfig"; sourceTree = "<group>"; };
+		FA1738C225822FB900345A0E /* DBApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBApi.swift; sourceTree = "<group>"; };
+		FA1738E42582415500345A0E /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		FA1738E92582429B00345A0E /* FavoriteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewModel.swift; sourceTree = "<group>"; };
+		FA797C11258216AA00A4DE1C /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		FAB22C81258223F8003D1B71 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAB8E1442567BAE00067062F /* NewsApi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsApi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAB8E1472567BAE00067062F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAB8E1502567BAE10067062F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,10 +99,44 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FA1738E32582414500345A0E /* FavoriteScreen */ = {
+			isa = PBXGroup;
+			children = (
+				FA1738E82582428900345A0E /* ViewModels */,
+				FA1738E42582415500345A0E /* FavoriteViewController.swift */,
+			);
+			path = FavoriteScreen;
+			sourceTree = "<group>";
+		};
+		FA1738E82582428900345A0E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				FA1738E92582429B00345A0E /* FavoriteViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		FA797C0F2582169000A4DE1C /* AuthScreen */ = {
+			isa = PBXGroup;
+			children = (
+				FA797C102582169800A4DE1C /* Controllers */,
+			);
+			path = AuthScreen;
+			sourceTree = "<group>";
+		};
+		FA797C102582169800A4DE1C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FA797C11258216AA00A4DE1C /* AuthViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		FAB8E13B2567BAE00067062F = {
 			isa = PBXGroup;
 			children = (
 				FAB8E1462567BAE00067062F /* NewsApi */,
+				FAB22C81258223F8003D1B71 /* GoogleService-Info.plist */,
 				FAB8E1452567BAE00067062F /* Products */,
 				627DAD28972B1418707DF414 /* Pods */,
 				C940822FA17CAE5CB241D1AB /* Frameworks */,
@@ -130,6 +174,8 @@
 		FAB8E15E2567BB1A0067062F /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				FA1738E32582414500345A0E /* FavoriteScreen */,
+				FA797C0F2582169000A4DE1C /* AuthScreen */,
 				FAB8E15F2567BB1E0067062F /* Common */,
 				FAB8E1602567BB210067062F /* NewsScreen */,
 				FAFD04872568198400FDC2D7 /* FilteringScreen */,
@@ -189,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				FAFD043A2567C54E00FDC2D7 /* ServerApi.swift */,
+				FA1738C225822FB900345A0E /* DBApi.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -268,6 +315,7 @@
 				FAB8E1412567BAE00067062F /* Frameworks */,
 				FAB8E1422567BAE00067062F /* Resources */,
 				6586492A1C1AD27C8BCD33C1 /* [CP] Embed Pods Frameworks */,
+				7F4113AABB95F2B43788D36D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -317,6 +365,7 @@
 			files = (
 				FAB8E1542567BAE10067062F /* LaunchScreen.storyboard in Resources */,
 				FAB8E1512567BAE10067062F /* Assets.xcassets in Resources */,
+				FAB22C82258223F8003D1B71 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +387,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewsApi/Pods-NewsApi-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7F4113AABB95F2B43788D36D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NewsApi/Pods-NewsApi-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NewsApi/Pods-NewsApi-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NewsApi/Pods-NewsApi-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BAD738F317A346A93B23938A /* [CP] Check Pods Manifest.lock */ = {
@@ -369,8 +435,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA1738E52582415500345A0E /* FavoriteViewController.swift in Sources */,
 				FAFD04602567EB5400FDC2D7 /* BrowserViewController.swift in Sources */,
+				FA1738C325822FB900345A0E /* DBApi.swift in Sources */,
 				FAFD04282567C02200FDC2D7 /* NewsModel.swift in Sources */,
+				FA1738EA2582429B00345A0E /* FavoriteViewModel.swift in Sources */,
 				FAB8E1622567BB350067062F /* NewsViewController.swift in Sources */,
 				FAFD04552567D35100FDC2D7 /* NewsTableViewCell.swift in Sources */,
 				FAFD043B2567C54E00FDC2D7 /* ServerApi.swift in Sources */,
@@ -381,6 +450,7 @@
 				FAFD045D2567E51F00FDC2D7 /* Utils.swift in Sources */,
 				FAFD047F256813D300FDC2D7 /* CategoryViewModel.swift in Sources */,
 				FAFD047C256812A900FDC2D7 /* CountryViewController.swift in Sources */,
+				FA797C12258216AA00A4DE1C /* AuthViewController.swift in Sources */,
 				FAFD0479256810F800FDC2D7 /* CountryViewModel.swift in Sources */,
 				FAFD04672567F79500FDC2D7 /* FilteringViewController.swift in Sources */,
 				FAFD045A2567D79D00FDC2D7 /* ConstantsHelper.swift in Sources */,

@@ -33,7 +33,7 @@ class FilteringViewModel {
                 cell.accessoryType = .disclosureIndicator
                 
                 let label = UILabel()
-                label.text = item == "Country" ? filteringCountry.first?.value as! String : filteringCategory.first?.value as! String
+                label.text = item == "Country" ? AppConfig.shared.filteringCountry.first?.value as! String : AppConfig.shared.filteringCategory.first?.value as! String
                 label.font = .systemFont(ofSize: FontSizeHelper.title.size())
                 label.textColor = FontColorHelper.second.color()
                 label.translatesAutoresizingMaskIntoConstraints = false

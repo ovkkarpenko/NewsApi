@@ -17,9 +17,9 @@ class NewsViewModel {
     var articles: [ArticleModel] = []
     var items = PublishSubject<[SectionModel<String, ArticleModel>]>()
     
-    func fetchItems(_ completion: (() -> ())? = nil) {
-        if isQueryChanged {
-            isQueryChanged = false
+    func fetchData(_ completion: (() -> ())? = nil) {
+        if AppConfig.shared.isQueryChanged {
+            AppConfig.shared.isQueryChanged = false
             isEndedPages = false
             page = 1
             articles.removeAll()
@@ -48,7 +48,7 @@ class NewsViewModel {
     
     func nextPage(_ completion: (() -> ())? = nil) {
         page += 1
-        fetchItems(completion)
+        fetchData(completion)
     }
     
     func dataSource(cellIdentifier: String) -> RxTableViewSectionedReloadDataSource<SectionModel<String, ArticleModel>> {
@@ -97,7 +97,7 @@ class NewsViewModel {
            let date1 = dateFormatter.date(from: stringDate1),
            let date2 = dateFormatter.date(from: stringDate2) {
             
-            return sortedByDesc
+            return AppConfig.shared.sortedByDesc
                 ? date1 > date2
                 : date2 > date1
         }

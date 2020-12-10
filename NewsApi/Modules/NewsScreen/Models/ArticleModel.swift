@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ArticleModel: Codable {
+struct ArticleModel {
     
     var source: ArticleSourceModel
     var author: String?
@@ -17,10 +17,30 @@ struct ArticleModel: Codable {
     var urlToImage: String?
     var publishedAt: String?
     var content: String?
+    
+    init(author: String?, title: String, description: String?, url: String?, urlToImage: String?, publishedAt: String?, content: String?) {
+        self.source = ArticleSourceModel(id: "", name: "")
+        self.author = author
+        self.title = title
+        self.description = description
+        self.url = url
+        self.urlToImage = urlToImage
+        self.publishedAt = publishedAt
+        self.content = content
+    }
 }
 
-struct ArticleSourceModel: Codable {
+struct ArticleSourceModel {
     
     var id: String?
     var name: String
+}
+
+extension ArticleModel: Codable {
+    
+}
+
+
+extension ArticleSourceModel: Codable {
+    
 }
